@@ -1,2 +1,3 @@
-# It-s-an-afterimage
-그건 제 잔상입니다만
+# ObscuredTypeForUnity
+
+유니티용 암호화 된 타입 변수
