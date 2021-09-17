@@ -15,11 +15,11 @@ public class CryptoAES
 
     public static string GetPasswordBySize(KeySize keySize = KeySize.Byte128) => Password.Substring(0, (int)keySize / sizeof(byte));
 
-    public static string Encrypt(string plain, KeySize keySize = KeySize.Byte128)
+    public static string Encrypt(string plainData, KeySize keySize = KeySize.Byte128) => Encrypt(Encoding.UTF8.GetBytes(plainData), keySize);
+
+    public static string Encrypt(byte[] plainBytes, KeySize keySize = KeySize.Byte128)
     {
         var key = GetPasswordBySize(keySize);
-
-        var plainBytes = Encoding.UTF8.GetBytes(plain);
 
         myRijndael.Clear();
         myRijndael.Mode = CipherMode.CBC;
@@ -43,7 +43,7 @@ public class CryptoAES
         return Convert.ToBase64String(encryptBytes);
     }
 
-    public static string AESDecrypt128(string encrypt, KeySize keySize = KeySize.Byte128)
+    public static string Decrypt(string encrypt, KeySize keySize = KeySize.Byte128)
     {
         var key = GetPasswordBySize(keySize);
 
