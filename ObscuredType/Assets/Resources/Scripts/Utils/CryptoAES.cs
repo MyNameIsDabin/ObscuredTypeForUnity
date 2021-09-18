@@ -7,13 +7,14 @@ public class CryptoAES
 {
     private static readonly string Password = "3ds1s334e4dcc7c4yz4554e732983h";
 
-    public enum KeySize {
+    public enum KeySize 
+    {
         Byte128 = 128
     }
 
     private static RijndaelManaged myRijndael = new RijndaelManaged();
 
-    public static string GetPasswordBySize(KeySize keySize = KeySize.Byte128) => Password.Substring(0, (int)keySize / sizeof(byte));
+    public static string GetPasswordBySize(KeySize keySize = KeySize.Byte128) => Password;
 
     public static string Encrypt(string plainData, KeySize keySize = KeySize.Byte128) => Encrypt(Encoding.UTF8.GetBytes(plainData), keySize);
 
