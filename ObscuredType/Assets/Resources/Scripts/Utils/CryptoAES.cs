@@ -5,7 +5,8 @@ using System.Text;
 
 public class CryptoAES
 {
-    private static readonly string Password = "3ds1s334e4dcc7c4yz4554e732983h";
+    public const string DefaultPassword = "01234567890123456789012345678901"; // length : 32
+    public static string IV = "0123456789012345"; // length : 16
 
     public enum KeySize 
     {
@@ -14,23 +15,19 @@ public class CryptoAES
 
     private static RijndaelManaged myRijndael = new RijndaelManaged();
 
-    public static string GetPasswordBySize(KeySize keySize = KeySize.Byte128) => Password;
+    public static string Encrypt(string plainData, string password = DefaultPassword, KeySize keySize = KeySize.Byte128) => Encrypt(Encoding.UTF8.GetBytes(plainData), password, keySize);
 
-    public static string Encrypt(string plainData, KeySize keySize = KeySize.Byte128) => Encrypt(Encoding.UTF8.GetBytes(plainData), keySize);
-
-    public static string Encrypt(byte[] plainBytes, KeySize keySize = KeySize.Byte128)
+    public static string Encrypt(byte[] plainBytes, string password = DefaultPassword, KeySize keySize = KeySize.Byte128)
     {
-        var key = GetPasswordBySize(keySize);
-
         myRijndael.Clear();
         myRijndael.Mode = CipherMode.CBC;
         myRijndael.Padding = PaddingMode.PKCS7;
-        myRijndael.KeySize = 128;
+        myRijndael.KeySize = (int)keySize;
 
         var memoryStream = new MemoryStream();
         var cryptoStream = new CryptoStream(
             memoryStream,
-            myRijndael.CreateEncryptor(Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(key)),
+            myRijndael.CreateEncryptor(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(IV)),
             CryptoStreamMode.Write);
 
         cryptoStream.Write(plainBytes, 0, plainBytes.Length);
@@ -44,21 +41,19 @@ public class CryptoAES
         return Convert.ToBase64String(encryptBytes);
     }
 
-    public static string Decrypt(string encrypt, KeySize keySize = KeySize.Byte128)
+    public static string Decrypt(string encrypt, string password = DefaultPassword, KeySize keySize = KeySize.Byte128)
     {
-        var key = GetPasswordBySize(keySize);
-
         var encryptBytes = Convert.FromBase64String(encrypt);
 
         myRijndael.Clear();
         myRijndael.Mode = CipherMode.CBC;
         myRijndael.Padding = PaddingMode.PKCS7;
-        myRijndael.KeySize = 128;
+        myRijndael.KeySize = (int)keySize;
 
         var memoryStream = new MemoryStream(encryptBytes);
         var cryptoStream = new CryptoStream(
             memoryStream,
-            myRijndael.CreateDecryptor(Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(key)), 
+            myRijndael.CreateDecryptor(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(IV)), 
             CryptoStreamMode.Read);
 
         var plainBytes = new byte[encryptBytes.Length];
