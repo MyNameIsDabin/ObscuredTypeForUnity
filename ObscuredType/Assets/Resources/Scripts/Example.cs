@@ -9,16 +9,16 @@ public class Example : MonoBehaviour
 
     void Start()
     {
-        Debug.Log($"Score : {Score.Value}");
+        Debug.Log($"Score : {Score.Value}"); // 20
         Score.Value = 32;
-        Debug.Log($"Score : {Score.Value}");
+        Debug.Log($"Score : {Score.Value}"); // 32
         Score.Hack_SetValue(52);
-        Debug.Log($"Score : {Score.Value}");
+        Debug.Log($"Score : {Score.Value}"); // 32
 
-        Debug.Log($"Name : {Name.Value}");
+        Debug.Log($"Name : {Name.Value}"); // ABC
         Name.Value = "CDE";
-        Debug.Log($"Name : {Name.Value}");
+        Debug.Log($"Name : {Name.Value}"); // CDE
         Name.Hack_SetValue("FGH");
-        Debug.Log($"Name : {Name.Value}");
+        Debug.Log($"Name : {Name.Value}"); // CDE
     }
 }
